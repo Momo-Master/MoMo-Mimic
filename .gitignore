@@ -1,0 +1,129 @@
+# MoMo-Mimic .gitignore
+
+# ══════════════════════════════════════════════════════════════════════════════
+# OS Generated Files
+# ══════════════════════════════════════════════════════════════════════════════
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ══════════════════════════════════════════════════════════════════════════════
+# IDE / Editor
+# ══════════════════════════════════════════════════════════════════════════════
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Sensitive / Operation Specific
+# ══════════════════════════════════════════════════════════════════════════════
+# Never commit real operation data
+operations/
+loot/
+captures/
+exfil/
+*.pcap
+*.cap
+*.hccapx
+*.hashcat
+*.potfile
+
+# Client-specific payloads
+payloads/custom/
+payloads/client_*/
+
+# Credentials and secrets
+secrets/
+*.pem
+*.key
+*.crt
+*.p12
+id_rsa*
+id_ed25519*
+authorized_keys
+known_hosts
+
+# C2 configurations
+c2_config.yaml
+c2_config.yml
+listener.conf
+callback.conf
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Logs and Temporary Files
+# ══════════════════════════════════════════════════════════════════════════════
+logs/
+*.log
+tmp/
+temp/
+cache/
+*.tmp
+*.bak
+*.backup
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Build / Compilation
+# ══════════════════════════════════════════════════════════════════════════════
+build/
+dist/
+*.o
+*.so
+*.dll
+*.exe
+*.bin
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+env/
+venv/
+.env
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Raspberry Pi / P4wnP1 Specific
+# ══════════════════════════════════════════════════════════════════════════════
+# SD Card images (too large)
+*.img
+*.img.xz
+*.img.gz
+*.iso
+
+# P4wnP1 runtime data
+/var/log/P4wnP1/
+runtime_data/
+
+# WiFi credentials
+wpa_supplicant.conf
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 3D Printing Files (keep STL, ignore project files)
+# ══════════════════════════════════════════════════════════════════════════════
+*.3mf
+*.gcode
+*.ufp
+# Keep STL files
+!enclosure/*.stl
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Documentation Build
+# ══════════════════════════════════════════════════════════════════════════════
+_site/
+.jekyll-cache/
+.sass-cache/
+

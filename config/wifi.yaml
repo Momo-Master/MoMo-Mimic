@@ -1,0 +1,114 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# MoMo-Mimic WiFi Configuration
+# P4wnP1 A.L.O.A. Wireless Settings
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WiFi Mode: Access Point (AP)
+# Creates a hotspot for remote control
+# ─────────────────────────────────────────────────────────────────────────────
+wifi:
+  mode: "ap"              # ap | sta | off
+  
+  # Access Point Settings
+  ap:
+    # Network name - CHANGE FOR OPERATIONAL USE
+    ssid: "MoMo-Mimic"
+    
+    # Hidden SSID (stealth mode)
+    hidden: false
+    
+    # Password (WPA2) - CHANGE THIS!
+    password: "MoMoSecure2025!"
+    
+    # Channel (1-11 for 2.4GHz)
+    channel: 6
+    
+    # WiFi protocol
+    hw_mode: "g"          # g = 2.4GHz 802.11g
+    
+    # Country code (for regulatory)
+    country_code: "US"
+    
+    # Max clients
+    max_clients: 5
+    
+  # Static IP for AP mode
+  ip:
+    address: "172.24.0.1"
+    netmask: "255.255.255.0"
+    gateway: "172.24.0.1"
+    
+  # DHCP server for connected clients
+  dhcp:
+    enabled: true
+    range_start: "172.24.0.10"
+    range_end: "172.24.0.50"
+    lease_time: "1h"
+    dns: "8.8.8.8"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Stealth Presets
+# Pre-configured settings for covert operations
+# ─────────────────────────────────────────────────────────────────────────────
+presets:
+  # Default - Visible network for testing
+  default:
+    ssid: "MoMo-Mimic"
+    hidden: false
+    password: "MoMoSecure2025!"
+    
+  # Hidden network - No broadcast
+  hidden:
+    ssid: "MoMo-Mimic"
+    hidden: true
+    password: "MoMoSecure2025!"
+    
+  # Blend in as printer
+  fake_printer:
+    ssid: "HP-Print-52-OfficeJet"
+    hidden: false
+    password: "printer123"
+    
+  # Blend in as IoT device
+  fake_iot:
+    ssid: "ESP_A4B2C3"
+    hidden: false
+    password: "nodemcu123"
+    
+  # Blend in as guest network
+  fake_guest:
+    ssid: "Guest-WiFi"
+    hidden: false
+    password: "welcome123"
+    
+  # Maximum stealth - No SSID, random MAC
+  stealth:
+    ssid: ""
+    hidden: true
+    password: "R4nd0mP@ss!2025"
+    mac_randomize: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Station Mode (Connect to existing network)
+# ─────────────────────────────────────────────────────────────────────────────
+  station:
+    # Networks to connect to (in order of priority)
+    networks:
+      - ssid: "OperatorPhone"
+        password: "hotspot_password"
+        priority: 1
+        
+      - ssid: "BackupNetwork"
+        password: "backup_password"
+        priority: 2
+    
+    # Fallback to AP mode if no network found
+    fallback_to_ap: true
+    fallback_delay: 30    # seconds to wait before fallback
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Active Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+active_preset: "default"
+
