@@ -5,6 +5,7 @@
   <img src="https://img.shields.io/badge/Framework-P4wnP1-purple?style=for-the-badge" alt="P4wnP1">
   <img src="https://img.shields.io/badge/Type-HID%20Injection-red?style=for-the-badge" alt="HID">
   <img src="https://img.shields.io/badge/Version-1.0.0-blue?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Payloads-13-orange?style=for-the-badge" alt="Payloads">
 </p>
 
 <h3 align="center">Polymorphic USB Attack Platform</h3>
@@ -12,6 +13,12 @@
 <p align="center">
   <strong>Looks like a USB drive. Acts like a weapon.</strong><br>
   HID Injection • Network Hijack • Data Exfil • Covert Channel
+</p>
+
+<p align="center">
+  <a href="https://github.com/Momo-Master/MoMo">MoMo</a> •
+  <a href="https://github.com/Momo-Master/MoMo-Nexus">Nexus</a> •
+  <a href="https://github.com/Momo-Master/Momo-GhostBridge">GhostBridge</a>
 </p>
 
 ---
@@ -375,6 +382,19 @@ wifi:
 
 ---
 
+## 🌐 MoMo Ecosystem
+
+Mimic integrates with the MoMo ecosystem for remote command and data exfiltration.
+
+| Project | Description | Platform | Status |
+|---------|-------------|----------|--------|
+| **[MoMo](https://github.com/Momo-Master/MoMo)** | WiFi/BLE/SDR Audit Platform | Pi 5 | ✅ v1.5.2 |
+| **[MoMo-Nexus](https://github.com/Momo-Master/MoMo-Nexus)** | Central Communication Hub | Pi 4 | ✅ v1.0.0 |
+| **[MoMo-GhostBridge](https://github.com/Momo-Master/Momo-GhostBridge)** | Network Implant | NanoPi R2S | ✅ v0.5.0 |
+| **[MoMo-Mimic](https://github.com/Momo-Master/MoMo-Mimic)** | USB Attack Platform | Pi Zero 2W | ✅ v1.0.0 |
+
+---
+
 ## ⚠️ Legal Disclaimer
 
 **MoMo-Mimic is designed for authorized penetration testing and security research only.**
@@ -394,7 +414,14 @@ wifi:
 ---
 
 <p align="center">
-  <strong>Part of the 🔥 MoMo Platform</strong><br>
+  <strong>Part of the 🔥 MoMo Ecosystem</strong><br>
   <sub>Offensive Security Toolkit for Red Teams</sub>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Momo-Master/MoMo">MoMo</a> •
+  <a href="https://github.com/Momo-Master/MoMo-Nexus">Nexus</a> •
+  <a href="https://github.com/Momo-Master/Momo-GhostBridge">GhostBridge</a> •
+  <a href="https://github.com/Momo-Master/MoMo-Mimic">Mimic</a>
 </p>
 
